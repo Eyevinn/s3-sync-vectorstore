@@ -19,7 +19,8 @@
     "node": ">=18.15.0"
   },
   "dependencies": {
-    "commander": "^12.1.0"
+    "commander": "^12.1.0",
+    "openai": "^4.86.1"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.2",
