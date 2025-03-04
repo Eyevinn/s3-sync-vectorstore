@@ -1,15 +1,21 @@
 import { existsSync, mkdirSync, rmSync } from 'fs';
 import { join } from 'path';
+import { createS3cmdArgs } from './util';
+import { spawnSync } from 'child_process';
 
 const DEFAULT_STAGING_DIR = '/tmp/data';
 
-export interface SyncOptions {
+export interface BucketConfig {
   s3url: URL;
+  s3region?: string;
+  s3endpoint?: string;
+  s3accessKey?: string;
+  s3secretKey?: string;
+}
+
+export interface SyncOptions {
+  source: BucketConfig;
   vectorStoreId: string;
-  region?: string;
-  endpoint?: string;
-  accessKeyId?: string;
-  secretAccessKey?: string;
   stagingDir?: string;
 }
 
@@ -27,9 +33,33 @@ async function cleanup(stagingDir: string) {
   rmSync(stagingDir, { recursive: true, force: true });
 }
 
+async function syncToLocal(source: BucketConfig, stagingDir: string) {
+  console.log(`Syncing from ${source.s3url} to ${stagingDir}`);
+  const args = createS3cmdArgs(
+    ['sync', source.s3url.toString(), stagingDir],
+    source.s3endpoint
+  );
+  const { status, stderr } = spawnSync('aws', args, {
+    env: {
+      AWS_ACCESS_KEY_ID: source.s3accessKey,
+      AWS_SECRET_ACCESS_KEY: source.s3secretKey,
+      AWS_REGION: source.s3region
+    },
+    shell: true
+  });
+  if (status !== 0) {
+    if (stderr) {
+      console.log(stderr.toString());
+    }
+    throw new Error('Sync to staging dir failed');
+  }
+  console.log(`Synced ${source.s3url.toString()} to ${stagingDir}`);
+}
+
 export async function doSync(opts: SyncOptions) {
   const stagingDir = await prepare(opts.stagingDir);
   try {
+    await syncToLocal(opts.source, stagingDir);
     await cleanup(stagingDir);
   } catch (err) {
     await cleanup(stagingDir);

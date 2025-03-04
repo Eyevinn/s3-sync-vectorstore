@@ -1,6 +1,7 @@
 #! /usr/bin/env node
 
 import { Command } from 'commander';
+import { doSync } from '.';
 
 const cli = new Command();
 cli
@@ -24,13 +25,15 @@ cli
   .action(async (source, vectorStoreId, options) => {
     try {
       await doSync({
-        s3url: new URL(source),
+        source: {
+          s3url: new URL(source),
+          s3region: process.env.AWS_REGION || options.region,
+          s3endpoint: process.env.S3_ENDPOINT || options.endpoint,
+          s3accessKey: process.env.AWS_ACCESS_KEY_ID || options.accessKeyId,
+          s3secretKey:
+            process.env.AWS_SECRET_ACCESS_KEY || options.secretAccessKey
+        },
         vectorStoreId,
-        region: process.env.AWS_REGION || options.region,
-        endpoint: process.env.S3_ENDPOINT || options.endpoint,
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID || options.accessKeyId,
-        secretAccessKey:
-          process.env.AWS_SECRET_ACCESS_KEY || options.secretAccessKey,
         stagingDir: process.env.STAGING_DIR || options.stagingDir
       });
     } catch (err) {
