@@ -1,37 +1,54 @@
 <h1 align="center">
-  Project Name or Logo
+  S3 Sync OpenAI Vector Store
 </h1>
 
 <div align="center">
-  project name - quick salespitch why this is awesome. 
-  <br />
-  <br />
-  :book: <b><a href="https://eyevinn.github.io/{{repo-name}}/">Read the documentation (github pages)</a></b> :eyes:
+  Sync the contents of an S3 bucket with an OpenAI vector store
   <br />
 </div>
 
 <div align="center">
 <br />
 
-[![npm](https://img.shields.io/npm/v/@eyevinn/{{repo-name}}?style=flat-square)](https://www.npmjs.com/package/@eyevinn/{{repo-name}})
-[![github release](https://img.shields.io/github/v/release/Eyevinn/{{repo-name}}?style=flat-square)](https://github.com/Eyevinn/{{repo-name}}/releases)
-[![license](https://img.shields.io/github/license/eyevinn/{{repo-name}}.svg?style=flat-square)](LICENSE)
-
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-ff69b4.svg?style=flat-square)](https://github.com/eyevinn/{{repo-name}}/issues?q=is%3Aissue+is%3Aopen+label%3A%22help+wanted%22)
 [![made with hearth by Eyevinn](https://img.shields.io/badge/made%20with%20%E2%99%A5%20by-Eyevinn-59cbe8.svg?style=flat-square)](https://github.com/eyevinn)
 [![Slack](http://slack.streamingtech.se/badge.svg)](http://slack.streamingtech.se)
 
 </div>
 
-<!-- Add a description of the project here -->
+Sync the contents of an S3 bucket with an OpenAI vector store
 
 ## Requirements
 
-<!--Add any external project dependencies such as node.js version etc here -->
+- OpenAI API key
+- AWS S3 CLI
 
 ## Installation / Usage
 
-<!--Add clear instructions on how to use the project here -->
+Options can be provided either as command line options or environment variables.
+
+```bash
+% npx @eyevinn/s3-sync-vectorstore -h
+Sync the files on an S3 bucket with an OpenAI vector store
+
+Arguments:
+  source                                   Source S3 URL
+  vector-store-id                          OpenAI vector store ID
+
+Options:
+  --openai-api-key                         OpenAI API key (OPENAI_API_KEY)
+  --region <region>                        AWS region (AWS_REGION)
+  --endpoint <endpoint>                    S3 endpoint (S3_ENDPOINT)
+  --access-key-id <access-key-id>          AWS access key ID (AWS_ACCESS_KEY_ID)
+  --secret-access-key <secret-access-key>  AWS secret access key (AWS_SECRET_ACCESS_KEY)
+  --staging-dir <staging-dir>              Staging directory (STAGING_DIR) (default: "/tmp/data")
+  -h, --help                               display help for command
+```
+
+```bash
+% export OPENAI_API_KEY=<openai-api-key>
+% npx @eyevinn/s3-sync-vectorstore \
+  s3://source/files/ vs-3434533213
+```
 
 ## Development
 

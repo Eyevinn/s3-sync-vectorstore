@@ -16,6 +16,7 @@ export interface BucketConfig {
 export interface SyncOptions {
   source: BucketConfig;
   vectorStoreId: string;
+  openaiApiKey: string;
   stagingDir?: string;
 }
 

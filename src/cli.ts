@@ -8,6 +8,7 @@ cli
   .description('Sync the files on an S3 bucket with an OpenAI vector store')
   .argument('<source>', 'Source S3 URL')
   .argument('<vector-store-id>', 'OpenAI vector store ID')
+  .option('--openai-api-key', 'OpenAI API key (OPENAI_API_KEY)')
   .option('--region <region>', 'AWS region (AWS_REGION)')
   .option('--endpoint <endpoint>', 'S3 endpoint (S3_ENDPOINT)')
   .option(
@@ -15,7 +16,8 @@ cli
     'AWS access key ID (AWS_ACCESS_KEY_ID)'
   )
   .option(
-    '--secret-access-key <secret-access-key>, AWS secret access key (AWS_SECRET_ACCESS_KEY)'
+    '--secret-access-key <secret-access-key>',
+    'AWS secret access key (AWS_SECRET_ACCESS_KEY)'
   )
   .option(
     '--staging-dir <staging-dir>',
@@ -34,6 +36,7 @@ cli
             process.env.AWS_SECRET_ACCESS_KEY || options.secretAccessKey
         },
         vectorStoreId,
+        openaiApiKey: process.env.OPENAI_API_KEY || options.openaiApiKey,
         stagingDir: process.env.STAGING_DIR || options.stagingDir
       });
     } catch (err) {

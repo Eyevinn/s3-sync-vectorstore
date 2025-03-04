@@ -1,7 +1,7 @@
 {
-  "name": "@eyevinn/typescript-nodecli",
+  "name": "@eyevinn/s3-sync-vectorstore",
   "version": "1.0.0",
-  "description": "Template CLI for TypeScript Node.js projects",
+  "description": "Sync the contents of an S3 bucket with an OpenAI vector store",
   "main": "dist/index.js",
   "bin": {
     "typescript-nodecli": "dist/cli.js"
