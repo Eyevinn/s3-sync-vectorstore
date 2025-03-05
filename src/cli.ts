@@ -30,7 +30,7 @@ cli
     try {
       await doSync({
         source: {
-          s3url: new URL(source),
+          s3url: source.split(',').map((src: string) => new URL(src)),
           s3region: process.env.AWS_REGION || options.region,
           s3endpoint: process.env.S3_ENDPOINT || options.endpoint,
           s3accessKey: process.env.AWS_ACCESS_KEY_ID || options.accessKeyId,
