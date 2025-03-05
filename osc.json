@@ -1,0 +1,61 @@
+{
+  "repositoryUrl": "https://github.com/Eyevinn/s3-sync-vectorstore",
+  "optionMapping": [
+    {
+      "optionName": "cmdLineArgs",
+      "envVarName": "CMDLINEARGS",
+      "optionType": "string",
+      "required": true
+    },
+    {
+      "optionName": "OpenaiApiKey",
+      "envVarName": "OPENAI_API_KEY",
+      "optionType": "string",
+      "required": true
+    },
+    {
+      "optionName": "Purpose",
+      "envVarName": "OPENAI_PURPOSE",
+      "optionType": "string",
+      "required": false
+    },
+    {
+      "optionName": "AwsRegion",
+      "envVarName": "AWS_REGION",
+      "optionType": "string",
+      "required": false
+    },
+    {
+      "optionName": "S3Endpoint",
+      "envVarName": "S3_ENDPOINT",
+      "optionType": "string",
+      "required": false
+    },
+    {
+      "optionName": "AwsAccessKeyId",
+      "envVarName": "AWS_ACCESS_KEY_ID",
+      "optionType": "string",
+      "required": false
+    },
+    {
+      "optionName": "AwsSecretAccessKey",
+      "envVarName": "AWS_SECRET_ACCESS_KEY",
+      "optionType": "string",
+      "required": false
+    }
+  ],
+  "costScores": {
+    "memcpu": 1,
+    "network": 1
+  },
+  "type": "GitHub",
+  "aiOptions": {
+    "salesPitch": true,
+    "image": true,
+    "model": "OSCAI"
+  },
+  "jobServiceOptions": {
+    "isJobService": true,
+    "commandLineArgsOption": "cmdLineArgs"
+  }
+}

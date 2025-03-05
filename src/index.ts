@@ -24,7 +24,7 @@ const DEFAULT_STAGING_DIR = '/tmp/data';
 const AWS_EXEC = process.env.AWS_EXEC || 'aws';
 
 export interface BucketConfig {
-  s3url: URL;
+  s3url: URL[];
   s3region?: string;
   s3endpoint?: string;
   s3accessKey?: string;
@@ -67,26 +67,28 @@ async function cleanup(stagingDir: string) {
 }
 
 async function syncToLocal(source: BucketConfig, stagingDir: string) {
-  console.log(`Syncing from ${source.s3url} to ${stagingDir}`);
-  const args = createS3cmdArgs(
-    ['sync', source.s3url.toString(), stagingDir],
-    source.s3endpoint
-  );
-  const { status, stderr } = spawnSync(AWS_EXEC, args, {
-    env: {
-      AWS_ACCESS_KEY_ID: source.s3accessKey,
-      AWS_SECRET_ACCESS_KEY: source.s3secretKey,
-      AWS_REGION: source.s3region
-    },
-    shell: true
-  });
-  if (status !== 0) {
-    if (stderr) {
-      console.log(stderr.toString());
+  for (const url of source.s3url) {
+    console.log(`Syncing from ${url} to ${stagingDir}`);
+    const args = createS3cmdArgs(
+      ['sync', url.toString(), stagingDir],
+      source.s3endpoint
+    );
+    const { status, stderr } = spawnSync(AWS_EXEC, args, {
+      env: {
+        AWS_ACCESS_KEY_ID: source.s3accessKey,
+        AWS_SECRET_ACCESS_KEY: source.s3secretKey,
+        AWS_REGION: source.s3region
+      },
+      shell: true
+    });
+    if (status !== 0) {
+      if (stderr) {
+        console.log(stderr.toString());
+      }
+      throw new Error('Sync to staging dir failed');
     }
-    throw new Error('Sync to staging dir failed');
+    console.log(`Synced ${url.toString()} to ${stagingDir}`);
   }
-  console.log(`Synced ${source.s3url.toString()} to ${stagingDir}`);
 }
 
 async function createChangeSet(
