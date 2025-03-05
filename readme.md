@@ -51,15 +51,13 @@ Options:
 
 ```bash
 % export OPENAI_API_KEY=<openai-api-key>
-% npx @eyevinn/s3-sync-vectorstore \
-  s3://source/files/ vs_3434533213
+% npm start s3://source/files/ vs_3434533213
 ```
 
 You can also sync multiple S3 buckets with one vector store by comma separating the source URLs
 
 ```bash
-% npx @eyevinn/s3-sync-vectorstore \
-  s3://source/files/,s3://source2/files/ vs_3434533213
+% npm start s3://source/files/,s3://source2/files/ vs_3434533213
 ```
 
 ### Running in Eyevinn Open Source Cloud
