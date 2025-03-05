@@ -26,6 +26,7 @@ cli
     '/tmp/data'
   )
   .option('--dry-run', 'Dry run')
+  .option('--ignore-update', 'Ignore updating files that already exist')
   .action(async (source, vectorStoreId, options) => {
     try {
       await doSync({
@@ -41,7 +42,8 @@ cli
         openaiApiKey: process.env.OPENAI_API_KEY || options.openaiApiKey,
         stagingDir: process.env.STAGING_DIR || options.stagingDir,
         dryRun: options.dryRun,
-        purpose: process.env.OPENAI_PURPOSE || options.purpose
+        purpose: process.env.OPENAI_PURPOSE || options.purpose,
+        ignoreUpdate: options.ignoreUpdate
       });
     } catch (err) {
       console.log((err as Error).message);

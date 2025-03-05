@@ -38,6 +38,7 @@ export interface SyncOptions {
   stagingDir?: string;
   dryRun?: boolean;
   purpose?: FilePurpose;
+  ignoreUpdate?: boolean;
 }
 
 interface ChangeSetFile {
@@ -138,7 +139,7 @@ async function createChangeSet(
     }
   }
   for (const vectorStoreFile of filesMap.values()) {
-    const fileInLocal = localFiles.find(
+    const fileInLocal = renamedFiles.find(
       (file) => file === vectorStoreFile.filename
     );
     if (!fileInLocal) {
@@ -162,7 +163,8 @@ async function applyChangeSet(
   stagingDir: string,
   openaiApiKey: string,
   dryRun: boolean,
-  purpose: FilePurpose
+  purpose: FilePurpose,
+  ignoreUpdate: boolean
 ) {
   console.log(`Applying change set for ${stagingDir}`);
   chdir(stagingDir);
@@ -198,7 +200,7 @@ async function applyChangeSet(
       console.log(
         `Updating file ${changeSetFile.filename} in ${changeSetFile.vectorStoreId}`
       );
-      if (!dryRun && changeSetFile.fileId) {
+      if (!dryRun && changeSetFile.fileId && !ignoreUpdate) {
         await openAi.beta.vectorStores.files.del(
           changeSetFile.vectorStoreId,
           changeSetFile.fileId
@@ -258,7 +260,8 @@ export async function doSync(opts: SyncOptions) {
       stagingDir,
       opts.openaiApiKey,
       opts.dryRun !== undefined ? opts.dryRun : false,
-      opts.purpose || 'assistants'
+      opts.purpose || 'assistants',
+      opts.ignoreUpdate !== undefined ? opts.ignoreUpdate : false
     );
     await cleanup(stagingDir);
   } catch (err) {
