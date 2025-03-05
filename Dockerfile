@@ -16,4 +16,4 @@ RUN npm ci
 RUN npm install -g .
 USER nodejs
 
-CMD ["typescript-nodecli"]
+CMD ["s3-sync-vectorstore"]

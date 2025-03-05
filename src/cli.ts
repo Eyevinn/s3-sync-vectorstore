@@ -9,6 +9,7 @@ cli
   .argument('<source>', 'Source S3 URL')
   .argument('<vector-store-id>', 'OpenAI vector store ID')
   .option('--openai-api-key', 'OpenAI API key (OPENAI_API_KEY)')
+  .option('--purpose', 'Purpose of the files (OPENAI_PURPOSE)', 'assistants')
   .option('--region <region>', 'AWS region (AWS_REGION)')
   .option('--endpoint <endpoint>', 'S3 endpoint (S3_ENDPOINT)')
   .option(
@@ -24,6 +25,7 @@ cli
     'Staging directory (STAGING_DIR)',
     '/tmp/data'
   )
+  .option('--dry-run', 'Dry run')
   .action(async (source, vectorStoreId, options) => {
     try {
       await doSync({
@@ -37,7 +39,9 @@ cli
         },
         vectorStoreId,
         openaiApiKey: process.env.OPENAI_API_KEY || options.openaiApiKey,
-        stagingDir: process.env.STAGING_DIR || options.stagingDir
+        stagingDir: process.env.STAGING_DIR || options.stagingDir,
+        dryRun: options.dryRun,
+        purpose: process.env.OPENAI_PURPOSE || options.purpose
       });
     } catch (err) {
       console.log((err as Error).message);
