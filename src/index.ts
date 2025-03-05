@@ -169,46 +169,60 @@ async function applyChangeSet(
 
   const openAi = new OpenAI({ apiKey: openaiApiKey });
   for (const changeSetFile of changeSet.filesToAdd.values()) {
-    console.log(
-      `Adding file ${changeSetFile.filename} to ${changeSetFile.vectorStoreId}`
-    );
-    if (!dryRun) {
-      const newFile = await openAi.files.create({
-        file: createReadStream(changeSetFile.filename),
-        purpose
-      });
-      console.log(`Added file ${newFile.filename} (${newFile.id})`);
-      await openAi.beta.vectorStores.files.create(changeSetFile.vectorStoreId, {
-        file_id: newFile.id
-      });
+    try {
       console.log(
-        `Added file ${newFile.filename} to vector store ${changeSetFile.vectorStoreId}`
+        `Adding file ${changeSetFile.filename} to ${changeSetFile.vectorStoreId}`
       );
+      if (!dryRun) {
+        const newFile = await openAi.files.create({
+          file: createReadStream(changeSetFile.filename),
+          purpose
+        });
+        console.log(`Added file ${newFile.filename} (${newFile.id})`);
+        await openAi.beta.vectorStores.files.create(
+          changeSetFile.vectorStoreId,
+          {
+            file_id: newFile.id
+          }
+        );
+        console.log(
+          `Added file ${newFile.filename} to vector store ${changeSetFile.vectorStoreId}`
+        );
+      }
+    } catch (error) {
+      console.log(`Error adding file ${changeSetFile.filename}: ${error}`);
     }
   }
   for (const changeSetFile of changeSet.filesToUpdate.values()) {
-    console.log(
-      `Updating file ${changeSetFile.filename} in ${changeSetFile.vectorStoreId}`
-    );
-    if (!dryRun && changeSetFile.fileId) {
-      await openAi.beta.vectorStores.files.del(
-        changeSetFile.vectorStoreId,
-        changeSetFile.fileId
-      );
-      await openAi.files.del(changeSetFile.fileId);
+    try {
       console.log(
-        `Deleted file ${changeSetFile.filename} (${changeSetFile.fileId})`
+        `Updating file ${changeSetFile.filename} in ${changeSetFile.vectorStoreId}`
       );
-      const newFile = await openAi.files.create({
-        file: createReadStream(changeSetFile.filename),
-        purpose
-      });
-      await openAi.beta.vectorStores.files.create(changeSetFile.vectorStoreId, {
-        file_id: newFile.id
-      });
-      console.log(
-        `Replaced file ${changeSetFile.filename} (${changeSetFile.fileId} => ${newFile.id})`
-      );
+      if (!dryRun && changeSetFile.fileId) {
+        await openAi.beta.vectorStores.files.del(
+          changeSetFile.vectorStoreId,
+          changeSetFile.fileId
+        );
+        await openAi.files.del(changeSetFile.fileId);
+        console.log(
+          `Deleted file ${changeSetFile.filename} (${changeSetFile.fileId})`
+        );
+        const newFile = await openAi.files.create({
+          file: createReadStream(changeSetFile.filename),
+          purpose
+        });
+        await openAi.beta.vectorStores.files.create(
+          changeSetFile.vectorStoreId,
+          {
+            file_id: newFile.id
+          }
+        );
+        console.log(
+          `Replaced file ${changeSetFile.filename} (${changeSetFile.fileId} => ${newFile.id})`
+        );
+      }
+    } catch (error) {
+      console.log(`Error updating file ${changeSetFile.filename}: ${error}`);
     }
   }
   for (const changeSetFile of changeSet.filesToRemove.values()) {
