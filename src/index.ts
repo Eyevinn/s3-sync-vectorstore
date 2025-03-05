@@ -139,7 +139,7 @@ async function createChangeSet(
     }
   }
   for (const vectorStoreFile of filesMap.values()) {
-    const fileInLocal = localFiles.find(
+    const fileInLocal = renamedFiles.find(
       (file) => file === vectorStoreFile.filename
     );
     if (!fileInLocal) {
