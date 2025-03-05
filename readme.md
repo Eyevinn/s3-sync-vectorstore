@@ -36,12 +36,15 @@ Arguments:
 
 Options:
   --openai-api-key                         OpenAI API key (OPENAI_API_KEY)
+  --purpose                                Purpose of the files (OPENAI_PURPOSE)
   --region <region>                        AWS region (AWS_REGION)
   --endpoint <endpoint>                    S3 endpoint (S3_ENDPOINT)
   --access-key-id <access-key-id>          AWS access key ID (AWS_ACCESS_KEY_ID)
   --secret-access-key <secret-access-key>  AWS secret access key (AWS_SECRET_ACCESS_KEY)
   --staging-dir <staging-dir>              Staging directory (STAGING_DIR) (default: "/tmp/data")
+  --dry-run                                Dry run
   -h, --help                               display help for command
+
 ```
 
 ```bash
@@ -49,10 +52,6 @@ Options:
 % npx @eyevinn/s3-sync-vectorstore \
   s3://source/files/ vs-3434533213
 ```
-
-## Development
-
-<!--Add clear instructions on how to start development of the project here -->
 
 ## Contributing
 
