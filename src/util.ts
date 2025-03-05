@@ -43,7 +43,6 @@ export function isSupportedFile(filename: string): boolean {
     filename.endsWith('.sh') ||
     filename.endsWith('.ts') ||
     filename.endsWith('.txt') ||
-    filename.endsWith('.xml') ||
     filename.endsWith('.yaml') ||
     filename.endsWith('.yml') ||
     filename.endsWith('.pdf') ||
